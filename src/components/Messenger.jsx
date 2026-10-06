@@ -1,0 +1,7 @@
+import { X, Phone, Video, Send } from 'lucide-react';
+import Avatar from './Avatar';
+
+export default function Messenger({ chat, setChat, messages, message, setMessage, sendMessage, notify }) {
+ if (!chat) return null;
+ return <div className="chat-window"><div className="chat-head"><div className="chat-person"><span className="contact-avatar"><Avatar person={chat} size={34}/><i/></span><div><strong>{chat.name}</strong><small>Active now</small></div></div><div className="chat-tools"><button className="plain" onClick={() => notify('Voice call is a UI demo')} aria-label="Voice call"><Phone size={18}/></button><button className="plain" onClick={() => notify('Video call is a UI demo')} aria-label="Video call"><Video size={18}/></button><button className="plain" onClick={() => setChat(null)} aria-label="Close Messenger"><X size={19}/></button></div></div><div className="chat-messages"><div className="chat-start"><Avatar person={chat} size={54}/><strong>{chat.name}</strong><span>You're connected on PakBook</span></div>{(messages[chat.id]||[]).map((m,i) => <div key={i} className={`message ${m.from==='you'?'mine':''}`}>{m.text}</div>)}{!(messages[chat.id]||[]).length&&<div className="suggested-message">Say salam 👋 and start a conversation!</div>}</div><form className="chat-input" onSubmit={e => {e.preventDefault();sendMessage()}}><input value={message} onChange={e => setMessage(e.target.value)} placeholder="Aa" aria-label="Message"/><button type="submit" disabled={!message.trim()} aria-label="Send message"><Send size={18}/></button></form></div>;
+}

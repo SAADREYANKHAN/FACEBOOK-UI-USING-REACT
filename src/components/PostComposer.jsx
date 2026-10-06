@@ -1,0 +1,6 @@
+import { X, Users, Image as ImageIcon, Smile, MapPin } from 'lucide-react';
+import Avatar from './Avatar';
+
+export default function PostComposer({ draft, setDraft, onClose, onPublish, currentUser }) {
+ return <div className="modal-backdrop" onClick={onClose}><div className="modal composer-modal" onClick={e => e.stopPropagation()}><div className="modal-head"><h2>Create post</h2><button className="close-btn" onClick={onClose} aria-label="Close"><X size={20}/></button></div><div className="modal-user"><Avatar person={currentUser}/><div><strong>{currentUser.name}</strong><span className="privacy-pill"><Users size={13}/> Friends</span></div></div><textarea autoFocus value={draft} onChange={e => setDraft(e.target.value)} placeholder="What's on your mind? Share a funny Pakistani moment…"/><div className="add-to-post"><strong>Add to your post</strong><button onClick={() => setDraft(d => d+' 📸')} title="Add photo"><ImageIcon color="#45bd62"/></button><button onClick={() => setDraft(d => d+' 😂')} title="Add feeling"><Smile color="#f7b928"/></button><button onClick={() => setDraft(d => d+' 📍 Pakistan')} title="Add location"><MapPin color="#f5533d"/></button></div><button className="primary-btn publish-btn" disabled={!draft.trim()} onClick={onPublish}>Post</button></div></div>;
+}
