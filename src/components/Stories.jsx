@@ -1,6 +1,7 @@
 import { Plus, X } from "lucide-react";
 import { useState } from "react";
 import { people } from "../data/mockData";
+import myProfile from "../assets/friends/My-Profile.jpg";
 
 export default function Stories() {
   const [selectedStory, setSelectedStory] = useState(null);
@@ -10,7 +11,7 @@ export default function Stories() {
       {[
         {
           name: "Create story",
-          img: "/src/assets/friends/My-Profile.jpg",
+          img: myProfile,
           create: true,
         },
         ...people.slice(0, 5).map((p) => ({

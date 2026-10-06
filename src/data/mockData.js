@@ -1,3 +1,4 @@
+
 import {
   Users,
   Store,
@@ -10,6 +11,38 @@ import {
   Play,
 } from "lucide-react";
 
+// Automatically load images from src/assets/friends
+const friendImages = import.meta.glob(
+  "../assets/friends/*.{jpg,jpeg,png,webp}",
+  {
+    eager: true,
+    import: "default",
+  }
+);
+
+// Match image filenames with friend names
+const getFriendAvatar = (name) => {
+  const normalize = (value) =>
+    value.toLowerCase().replace(/[^a-z0-9]/g, "");
+
+  const match = Object.entries(friendImages).find(([path]) => {
+    const filename = path
+      .split("/")
+      .pop()
+      .replace(/\.[^.]+$/, "");
+
+    return normalize(filename) === normalize(name);
+  });
+
+  return (
+    match?.[1] ||
+    `https://ui-avatars.com/api/?name=${encodeURIComponent(
+      name
+    )}&background=1877f2&color=fff`
+  );
+};
+
+// Friends data
 export const people = [
   ["Abbas", "Peshawar"],
   ["Abdullah", "Lahore"],
@@ -31,9 +64,11 @@ export const people = [
   id: i + 1,
   name: p[0],
   city: p[1],
-avatar: `/src/assets/friends/${p[0].toLowerCase().replaceAll(" ", "")}.jpg`,
-online: i % 4 !== 1,
+  avatar: getFriendAvatar(p[0]),
+  online: i % 4 !== 1,
 }));
+
+// Post captions
 const captions = [
   "Ammi said “bas 5 minute phone”... that was 3 episodes ago 😭😂",
   "POV: bijli goes right when the match reaches the last over 🥲🏏",
@@ -52,6 +87,8 @@ const captions = [
   "Me saving money all week then seeing a food deal: bismillah 🍔😂",
   "If chai could solve all problems, Pakistan would be unstoppable ☕✨",
 ];
+
+// Post photo IDs
 export const photoIds = [
   "photo-1529042410759-befb1204b468",
   "photo-1517248135467-4c7edcad34c4",
@@ -66,15 +103,19 @@ export const photoIds = [
   "photo-1555939594-58d7cb561ad1",
   "photo-1513104890138-7c749659a591",
 ];
+
+// Unsplash image helper
 export const img = (id, w = 1000) =>
   `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=82`;
+
+// Generate sample posts
 export const seedPosts = Array.from({ length: 32 }, (_, i) => {
   const caption = captions[i % captions.length];
 
   const photoId =
-  i % captions.length === 6
-    ? "photo-1515003197210-e0cd7184f8b5"
-    : photoIds[i % photoIds.length];
+    i % captions.length === 6
+      ? "photo-1515003197210-e0cd7184f8b5"
+      : photoIds[i % photoIds.length];
 
   return {
     id: i + 1,
@@ -82,10 +123,10 @@ export const seedPosts = Array.from({ length: 32 }, (_, i) => {
     time: [`${i + 1} min`, `${i + 2} hr`, "Yesterday", "2 days"][i % 4],
     caption,
     image:
-  caption ===
-  "That one cousin who becomes a photographer at every family event 📸🤣"
-    ? "https://images.pexels.com/photos/3184183/pexels-photo-3184183.jpeg?auto=compress&cs=tinysrgb&w=1000"
-    : img(photoId, 1000),
+      caption ===
+      "That one cousin who becomes a photographer at every family event 📸🤣"
+        ? "https://images.pexels.com/photos/3184183/pexels-photo-3184183.jpeg?auto=compress&cs=tinysrgb&w=1000"
+        : img(photoId, 1000),
     likes: 128 + i * 47,
     comments: 12 + i * 7,
     shares: 3 + i * 4,
@@ -93,6 +134,8 @@ export const seedPosts = Array.from({ length: 32 }, (_, i) => {
     kind: i % 7 === 3 ? "video" : "photo",
   };
 });
+
+// Sidebar navigation items
 export const navItems = [
   { label: "Friends", icon: Users },
   { label: "Memories", icon: Clock3 },
